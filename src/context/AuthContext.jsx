@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const PROF = {
     id: 0,
     nom: "ALIOU SOW",
-    email: "prof@sow.com",
+    email: "Sowaliou2504@gmail.com",
     motdepasse: "prof1234",
     role: "prof",
     matieres: ["Maths", "Physique-Chimie"],

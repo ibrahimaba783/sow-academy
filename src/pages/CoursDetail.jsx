@@ -8,9 +8,7 @@ const CoursDetail = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  // ✅ correction === + Number
   const cours = cours_bd.find(c => c.id === Number(id))
-
   const [chapitreActif, setChapitreActif] = useState(0)
   const [leconActive, setLeconActive] = useState(0)
 
@@ -18,19 +16,17 @@ const CoursDetail = () => {
     return (
       <div className='cours_detail'>
         <h1>Cours introuvable</h1>
-        <button className="filtre_actif" onClick={() => navigate('/cours')}>
+        <button onClick={() => navigate('/cours')} className="filtre_actif">
           Retour
         </button>
       </div>
     )
   }
 
-  // ✅ sécurisation user
   const aAcces = () => {
     if (!user) return false
     if (user.role === 'prof') return true
-
-    if (!user.abonnements || user.abonnements.length === 0) return false
+    if (!user.abonnements?.length) return false
 
     const abonnement = user.abonnements.find(
       a => a.matiere === cours.matiere && a.niveau === cours.niveau
@@ -44,7 +40,9 @@ const CoursDetail = () => {
     return new Date() < dateExpiration
   }
 
-  if (!aAcces()) {
+  const accesAutorise = aAcces()
+
+  if (!accesAutorise) {
     return (
       <div className='cours_detail'>
         <button className="cours_retour" onClick={() => navigate('/cours')}>
@@ -58,28 +56,20 @@ const CoursDetail = () => {
             <p>Ce cours est réservé aux étudiants abonnés.</p>
 
             <div className="cours_bloque_infos">
-              <p>Matière : <strong>{cours.matiere}</strong></p>
-              <p>Niveau : <strong>{cours.niveau}</strong></p>
-              <p>Prix : <strong>6000 FCFA / an</strong></p>
-              <p>Durée : <strong>1 an complet</strong></p>
+              <div><p>Matière : <strong>{cours.matiere}</strong></p></div>
+              <div><p>Niveau : <strong>{cours.niveau}</strong></p></div>
+              <div><p>Prix : <strong>6000 FCFA / an</strong></p></div>
             </div>
 
-            {user && user.matiere === cours.matiere && user.niveau === cours.niveau ? (
-              <button className="auth_btn" onClick={() => navigate('/paiement')}>
-                💳 S'abonner — 6000 FCFA
-              </button>
-            ) : (
-              <p>
-                ⚠️ Ce cours est pour {cours.niveau} en {cours.matiere}
-              </p>
-            )}
+            <button className="auth_btn" onClick={() => navigate('/paiement')}>
+              💳 S'abonner — 6000 FCFA
+            </button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ✅ sécurisation
   const chapitreCourant = cours.chapitres?.[chapitreActif]
   const leconCourante = chapitreCourant?.lecons?.[leconActive]
 
@@ -91,47 +81,43 @@ const CoursDetail = () => {
       </button>
 
       <div className="cours_detail_header">
-        <span>{cours.matiere}</span>
-        <span>{cours.niveau}</span>
         <h1>{cours.titre}</h1>
         <p>{cours.description}</p>
-        <p>⏱ {cours.duree}</p>
       </div>
 
       <div className="cours_detail_body">
 
-        {/* CHAPITRES */}
+        {/* Chapitres */}
         <div className="cours_chapitres">
           <h3>📋 Chapitres</h3>
 
-          {cours.chapitres.map((chap, i) => (
+          {cours.chapitres?.map((chap, i) => (
             <div
-              key={chap.id}
-              className={chapitreActif === i ? 'chapitre_actif' : ''}
+              key={chap.id || i}
+              className={`cours_chapitre ${chapitreActif === i ? 'chapitre_actif' : ''}`}
               onClick={() => {
                 setChapitreActif(i)
                 setLeconActive(0)
               }}
             >
-              {i + 1} - {chap.titre}
+              <span>{i + 1}</span>
+              <p>{chap.titre}</p>
             </div>
           ))}
         </div>
 
-        {/* CONTENU */}
+        {/* Contenu */}
         <div className="cours_contenu">
-
-          {!chapitreCourant && <p>Aucun contenu</p>}
 
           <h2>{chapitreCourant?.titre}</h2>
 
-          {/* LEÇONS */}
+          {/* Leçons */}
           {chapitreCourant?.lecons?.length > 0 && (
-            <div>
+            <div className="cours_lecons_tabs">
               {chapitreCourant.lecons.map((lecon, i) => (
                 <button
-                  key={i}
-                  className={leconActive === i ? 'filtre_actif' : ''}
+                  key={lecon.id || i}
+                  className={leconActive === i ? 'filtre_actif' : 'filtre_btn'}
                   onClick={() => setLeconActive(i)}
                 >
                   {typeof lecon === 'string' ? lecon : lecon.titre}
@@ -140,66 +126,46 @@ const CoursDetail = () => {
             </div>
           )}
 
-          {/* VIDEO */}
+          {/* Vidéo */}
           {leconCourante?.video_url ? (
-            <iframe
-              src={leconCourante.video_url}
-              title={leconCourante.titre}
-              style={{ width: '100%', height: '250px' }}
-              allowFullScreen
-            />
+            <div className="cours_video">
+              <iframe
+                src={leconCourante.video_url}
+                title={leconCourante.titre}
+                allowFullScreen
+                style={{ width: '100%', height: '400px', border: 'none' }}
+              />
+            </div>
           ) : (
-            <p>🎥 Pas de vidéo</p>
+            <p>Pas de vidéo disponible</p>
           )}
 
-          {/* IMAGE */}
+          {/* Image */}
           {leconCourante?.image_url && (
-            <img src={leconCourante.image_url} alt={leconCourante.titre} />
+            <div className="cours_image">
+              <img src={leconCourante.image_url} alt={leconCourante.titre} />
+            </div>
           )}
 
-          {/* NOTE */}
-          <div>
-            <h4>Notes</h4>
+          {/* Notes */}
+          <div className="cours_note">
+            <h4>📝 Notes</h4>
             <p>
-              {leconCourante?.contenu || "Contenu du cours"}
+              {leconCourante?.contenu || "Contenu du cours indisponible"}
             </p>
           </div>
 
-          {/* ✅ PDF CORRIGÉ */}
+          {/* PDF ✅ corrigé */}
           {leconCourante?.pdf_url && (
             <a
               href={leconCourante.pdf_url}
               target="_blank"
               rel="noreferrer"
+              className="ressource_btn_pdf"
             >
-              📥 Télécharger le PDF — {leconCourante.pdf_nom}
+              📥 Télécharger le PDF
             </a>
           )}
-
-          {/* NAV */}
-          <div>
-            <button
-              onClick={() => {
-                setChapitreActif(prev => Math.max(0, prev - 1))
-                setLeconActive(0)
-              }}
-              disabled={chapitreActif === 0}
-            >
-              ← Précédent
-            </button>
-
-            <button
-              onClick={() => {
-                setChapitreActif(prev =>
-                  Math.min(cours.chapitres.length - 1, prev + 1)
-                )
-                setLeconActive(0)
-              }}
-              disabled={chapitreActif === cours.chapitres.length - 1}
-            >
-              Suivant →
-            </button>
-          </div>
 
         </div>
       </div>
