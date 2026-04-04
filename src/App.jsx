@@ -37,6 +37,7 @@ import SupprimerEvaluation from './pages/SupprimerEvaluation'
 import AjouterPDF from './pages/AjouterPDF'
 import AjouterVideo from './pages/AjouterVideo'
 import Ressources from './pages/Ressources'
+import ProfParametres from './pages/ProfParametres'
 
 
 
@@ -57,6 +58,7 @@ function App() {
         { path: "/forum", element: <ProtectedRoute><Forum /></ProtectedRoute> },
         { path: "/profil", element: <ProtectedRoute><Profil /></ProtectedRoute> },
         { path: "/paiement", element: <ProtectedRoute><Paiement /></ProtectedRoute> },
+        { path: "/prof-parametres", element: <ProtectedRoute role="prof"><ProfParametres /></ProtectedRoute> },
 
         // Routes prof gestion cours
         { path: "/gestion-cours", element: <ProtectedRoute role="prof"><GestionCours /></ProtectedRoute> },

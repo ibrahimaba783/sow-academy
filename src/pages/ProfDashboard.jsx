@@ -52,6 +52,12 @@ const ProfDashboard = () => {
         <button className="filtre_actif" onClick={() => navigate('/gestion-exercices')}>
           📝 Gérer les exercices
         </button>
+        <button className="filtre_actif" onClick={() => navigate('/gestion-evaluations')}>
+          📊 Gérer les évaluations
+        </button>
+        <button className="filtre_actif" onClick={() => navigate('/ressources')}>
+          📚 Ressources
+        </button>
       </div>
 
       {/* onglets */}
@@ -76,28 +82,42 @@ const ProfDashboard = () => {
         </button>
       </div>
 
-      {/* contenu onglet cours */}
+      {/* onglet cours — style book */}
       {onglet === "cours" && (
         <div className="dashboard_section">
           <h2>📚 Tous les cours</h2>
           <div className="dashboard_cours_grid">
             {cours_bd.map((cours) => (
-              <div key={cours.id} className="dashboard_cours_card"
+              <div key={cours.id} className="book"
                 onClick={() => navigate(`/cours/${cours.id}`)}>
-                <div className="dashboard_cours_badge">{cours.matiere}</div>
-                <h3>{cours.titre}</h3>
-                <p>{cours.description}</p>
-                <div className="dashboard_cours_footer">
-                  <span>{cours.niveau}</span>
-                  <span>⏱ {cours.duree}</span>
+
+                {/* contenu intérieur */}
+                <div className="book_inner">
+                  <span className="cours_badge">{cours.matiere}</span>
+                  <h3>{cours.titre}</h3>
+                  <p>{cours.description}</p>
+                  <div className="dashboard_cours_footer">
+                    <span>{cours.niveau}</span>
+                    <span>⏱ {cours.duree}</span>
+                  </div>
                 </div>
+
+                {/* couverture */}
+                <div className="cover">
+                  <div className="cover_content">
+                    <span className="cours_badge">{cours.matiere}</span>
+                    <h3>{cours.titre}</h3>
+                    <span className="cours_niveau">{cours.niveau}</span>
+                  </div>
+                </div>
+
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* contenu onglet etudiants */}
+      {/* onglet etudiants */}
       {onglet === "etudiants" && (
         <div className="dashboard_section">
           <h2>👨‍🎓 Liste des étudiants ({etudiants.length})</h2>
@@ -122,20 +142,13 @@ const ProfDashboard = () => {
         </div>
       )}
 
-      {/* contenu onglet forum */}
+      {/* onglet forum */}
       {onglet === "forum" && (
         <div className="dashboard_section">
           <h2>💬 Forum</h2>
           <button className="auth_btn" onClick={() => navigate('/forum')}>
             Voir le forum
           </button>
-
-          <button className="filtre_actif" onClick={() => navigate('/gestion-evaluations')}>
-            📊 Gérer les évaluations
-            </button>
-            <button className="filtre_actif" onClick={() => navigate('/ressources')}>
-            📚 Ressources
-            </button>
         </div>
       )}
 

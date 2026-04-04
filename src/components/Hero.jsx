@@ -29,8 +29,7 @@ const Hero = () => {
         </h1>
 
         <p>
-          Des cours de qualité pour les niveaux 4ème, 3ème, 2nde S, 1ère S et TS.
-          Accédez à des ressources pédagogiques, des exercices et un forum de discussion.
+          Transformez vos difficultés en réussite en Maths et Physique-Chimie.
         </p>
 
         <div className="sow_hero_infos">
