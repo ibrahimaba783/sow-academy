@@ -1,3 +1,24 @@
+// 📌 Fonction pour récupérer tous les cours (base + localStorage)
+export const getCours = () => {
+  const coursLocal = JSON.parse(localStorage.getItem("cours") || "[]")
+  const coursSupprimes = JSON.parse(localStorage.getItem("cours_supprimes") || "[]")
+  const coursModifies = JSON.parse(localStorage.getItem("cours_modifies") || "{}")
+
+  // 🔄 combine
+  const tousLesCours = [...cours_bd, ...coursLocal]
+
+  // ✏️ applique modifications
+  const coursAvecModifs = tousLesCours.map(c => {
+    if (coursModifies[c.id]) return coursModifies[c.id]
+    return c
+  })
+
+  // ❌ filtre suppression (CORRIGÉ)
+  return coursAvecModifs.filter(c => !coursSupprimes.includes(String(c.id)))
+}
+
+
+// 📚 Base de données des cours
 export const cours_bd = [
   {
     id: 1,

@@ -1652,7 +1652,7 @@ body {
 }
 
 .cours_header p {
-  color: #6b7280;
+  color:#6b7280;
   font-size: 15px;
 }
 
@@ -1679,6 +1679,7 @@ body {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+ 
 }
 
 .filtre_btn {

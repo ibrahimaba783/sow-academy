@@ -19,9 +19,16 @@ const ProfDashboard = () => {
           <h1>👨‍🏫 Prof. {user.nom}</h1>
           <p>Maths & Physique-Chimie</p>
         </div>
-        <button className="dash_btn_logout" onClick={() => { logout(); navigate('/') }}>
-          Déconnexion
-        </button>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <button className="filtre_actif"
+            onClick={() => navigate('/prof-parametres')}>
+            ⚙️ Paramètres
+          </button>
+          <button className="dash_btn_logout"
+            onClick={() => { logout(); navigate('/') }}>
+            Déconnexion
+          </button>
+        </div>
       </div>
 
       {/* stats */}
@@ -90,8 +97,6 @@ const ProfDashboard = () => {
             {cours_bd.map((cours) => (
               <div key={cours.id} className="book"
                 onClick={() => navigate(`/cours/${cours.id}`)}>
-
-                {/* contenu intérieur */}
                 <div className="book_inner">
                   <span className="cours_badge">{cours.matiere}</span>
                   <h3>{cours.titre}</h3>
@@ -101,8 +106,6 @@ const ProfDashboard = () => {
                     <span>⏱ {cours.duree}</span>
                   </div>
                 </div>
-
-                {/* couverture */}
                 <div className="cover">
                   <div className="cover_content">
                     <span className="cours_badge">{cours.matiere}</span>
@@ -110,7 +113,6 @@ const ProfDashboard = () => {
                     <span className="cours_niveau">{cours.niveau}</span>
                   </div>
                 </div>
-
               </div>
             ))}
           </div>

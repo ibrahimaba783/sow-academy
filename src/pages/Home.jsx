@@ -1,12 +1,15 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Hero from '../components/Hero'
-import { cours_bd } from '../data/cours_bd'
+import { getCours } from '../data/cours_bd' // ✅ remplacement
 import { useAuth } from '../context/AuthContext'
 
 const Home = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
+
+  // ✅ récupération dynamique
+  const cours = getCours()
 
   return (
     <div className='home'>
@@ -43,7 +46,7 @@ const Home = () => {
         <div className="home_cours">
           <h2>Nos cours disponibles</h2>
           <div className="home_cours_grid">
-            {cours_bd.slice(0, 3).map((cours) => (
+            {cours.slice(0, 3).map((cours) => ( // ✅ corrigé
               <div key={cours.id} className="home_cours_card">
                 <div className="home_cours_badge">{cours.matiere}</div>
                 <h3>{cours.titre}</h3>

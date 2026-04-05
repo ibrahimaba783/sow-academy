@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { cours_bd } from '../data/cours_bd'
+import { getCours } from '../data/cours_bd' // ✅ remplacement
 import { useAuth } from '../context/AuthContext'
 
 const CoursDetail = () => {
@@ -8,7 +8,10 @@ const CoursDetail = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const cours = cours_bd.find(c => c.id === Number(id))
+  // ✅ récupération dynamique
+  const coursList = getCours()
+  const cours = coursList.find(c => c.id === Number(id))
+
   const [chapitreActif, setChapitreActif] = useState(0)
   const [leconActive, setLeconActive] = useState(0)
 
@@ -155,7 +158,7 @@ const CoursDetail = () => {
             </p>
           </div>
 
-          {/* PDF ✅ corrigé */}
+          {/* PDF */}
           {leconCourante?.pdf_url && (
             <a
               href={leconCourante.pdf_url}

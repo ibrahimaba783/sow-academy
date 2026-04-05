@@ -1,13 +1,17 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { cours_bd } from '../data/cours_bd'
+import { getCours } from '../data/cours_bd' // ✅ remplacement
 
 const Dashboard = () => {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
-  const mes_cours = cours_bd.filter(c =>
+  // ✅ récupération dynamique des cours
+  const cours = getCours()
+
+  // ✅ filtrage avec les cours dynamiques
+  const mes_cours = cours.filter(c =>
     c.matiere === user.matiere && c.niveau === user.niveau
   )
 
@@ -61,7 +65,11 @@ const Dashboard = () => {
               <div
                 key={cours.id}
                 className={`dashboard_cours_card ${!abonnementActif() ? 'locked' : ''}`}
-                onClick={() => abonnementActif() ? navigate(`/cours/${cours.id}`) : navigate('/paiement')}
+                onClick={() =>
+                  abonnementActif()
+                    ? navigate(`/cours/${cours.id}`)
+                    : navigate('/paiement')
+                }
               >
                 <div className="dashboard_cours_badge">{cours.matiere}</div>
                 <h3>{cours.titre}</h3>

@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { cours_bd } from '../data/cours_bd'
+import { getCours } from '../data/cours_bd' 
 
 const Cours = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [filtre, setFiltre] = useState('tous')
   const [niveau, setNiveau] = useState('tous')
+
+  // ✅ récupération dynamique des cours
+  const cours = getCours()
 
   const aAcces = (cours) => {
     if (user.role === 'prof') return true
@@ -25,7 +28,8 @@ const Cours = () => {
     return new Date() < dateExpiration
   }
 
-  const cours_filtres = cours_bd.filter(c => {
+  // ✅ on utilise maintenant "cours" au lieu de cours_bd
+  const cours_filtres = cours.filter(c => {
     if (user.role === 'prof') {
       const matiereOk = filtre === 'tous' || c.matiere === filtre
       const niveauOk = niveau === 'tous' || c.niveau === niveau
@@ -94,7 +98,7 @@ const Cours = () => {
         </div>
       )}
 
-      {/* 🔥 CARDS STYLE BOOK */}
+      {/* 🔥 CARDS */}
       <div className="cours_grid">
         {cours_filtres.map((cours) => {
           const acces = aAcces(cours)
@@ -110,7 +114,6 @@ const Cours = () => {
               }
             >
 
-              {/* intérieur */}
               <div className="book_inner">
                 <h3>{cours.titre}</h3>
                 <p>{cours.description}</p>
@@ -121,11 +124,10 @@ const Cours = () => {
                 {!acces && <p>🔒 Abonnement requis</p>}
               </div>
 
-              {/* couverture */}
               <div className="cover">
                 <div className="cover_content">
                   <h3>
-                    {cours.matiere === "Maths" ? " Maths" : " Physique"}
+                    {cours.matiere === "Maths" ? "Maths" : "Physique"}
                   </h3>
                   <p>{cours.niveau}</p>
 
